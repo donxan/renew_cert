@@ -29,9 +29,9 @@ do
 done
 
 echo $DP_Id
-check_ok || export DP_Id="74445"
+check_ok || export DP_Id="" #api id
 echo $DP_Key
-check_ok || export DP_Key="9355db48123ab4a6396b64a70e201e0a"
+check_ok || export DP_Key="" #api key
 cd ~
 [[ -d ~/acme.sh ]] || git clone https://github.com/Neilpang/acme.sh.git
 check_ok
