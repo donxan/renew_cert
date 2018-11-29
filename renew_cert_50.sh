@@ -70,26 +70,6 @@ else
 fi
 }
 renew_50d
-#acme.sh --issue -d abcgogo.com --dns dns_dp 
-#Apache 服务器安装letsencrypt SSL证书如下：:
-#acme.sh --install-cert -d wzfou.com \
-#--key-file       /path/to/keyfile/in/apache/key.pem  \
-#--fullchain-file /path/to/fullchain/certfile/apache/fullchain.pem \
-#--reloadcmd     "service apache2 force-reload"
-#或者--reloadcmd     "/etc/init.d/httpd force-reload"
-#Nginx 服务器安装letsencrypt SSL证书e:
-#acme.sh --install-cert -d wzfou.com \
-#--key-file       /path/to/keyfile/in/nginx/key.pem  \
-#--fullchain-file /path/to/fullchain/nginx/cert.pem \
-#--reloadcmd     "service nginx force-reload"
-
-#这里用的是 service nginx force-reload, 不是 service nginx reload, 据测试, reload 并不会重新加载证书, 所以用的 force-reload,Nginx 的配置 ssl_certificate 使用 /etc/nginx/ssl/fullchain.cer ，而非 /etc/nginx/ssl/<domain>.cer ，否则 SSL Labs 的测试会报 Chain issues Incomplete 错误。
-#如果你发现letsencrypt SSL证书不能定时更新，你也可以自己手动强制更新:
-
-#acme.sh --renew -d abcgogo.com --force
-#如果是ECC cert，使用以下命令:
-
-#acme.sh --renew -d abcgogo.com --force --ecc
 #添加自动任务,每周3执行任务。
 if [ ! -e /var/spool/cron/ ];then
 mkdir -p /var/spool/cron/
@@ -97,12 +77,3 @@ fi
 if [[ `grep -v '^\s*#' /var/spool/cron/root | grep -c 'rewcrt_50.sh'` -eq 0 ]];then
 echo "* 3 * * * /bin/bash ~/rewcrt_50.sh >> /var/log/le-dnspod.log 2>&1 " >> /var/spool/cron/`whoami`
 fi
-rewcrt() {
-seconds=$((50*24*3600))
-for i in {1..10}
-do
-	/bin/bash ~/rewcrt_50.sh  > /dev/null 2>&1
-	sleep ${seconds}
-done 
-}
-#rewcrt
