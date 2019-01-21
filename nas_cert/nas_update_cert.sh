@@ -61,7 +61,7 @@ fi
 generateCrt () {
   echo 'begin generateCrt'
   cd ${BASE_ROOT}
-  source /volume1/test/syno-acme/config
+  source ./config
   echo 'begin updating default cert by acme.sh tool'
   installAcme
   source ${ACME_BIN_PATH}/acme.sh.env
