@@ -9,6 +9,8 @@ ACME_BIN_PATH=${BASE_ROOT}/.acme.sh
 TEMP_PATH=${BASE_ROOT}/temp
 #CRT_PATH_NAME=`cat ${CRT_BASE_PATH}/_archive/DEFAULT`
 #CRT_PATH=${CRT_BASE_PATH}/_archive/${CRT_PATH_NAME}
+DOMAIN=abcgogo.com
+
 
 installAcme() {
   echo 'begin installAcme'
@@ -35,12 +37,12 @@ a=`stat -c %Y ${f_name}`
 b=`date +%s`
 s=$((b-a))
 t=$((50*24*3600))
-if [[ $S -gt $t ]];then
+if [[ $s -gt $t ]];then
   echo "Time is more than 50 days,cert will be update"
   ${ACME_BIN_PATH}/acme.sh --renew -d abcgogo.com --force --ecc
   echo "begin install cert for nas"
-  for nas_cert_path in `find /usr/syno/etc/certificate/ -name "fullchain.pem" | xargs -i ls -d {} | awk -F 'fullchain.pem' '{print $1}'`
-    do
+  for nas_cert_path in `find /usr/syno/etc/certificate/ -name "fullchain.pem" | xargs -i ls {} | awk -F 'fullchain.pem' '{print $1}'`
+      do
 	     ${ACME_BIN_PATH}/acme.sh --installcert -d ${DOMAIN} -d *.${DOMAIN} \
 		      --certpath ${nas_cert_path}/cert.pem \
 			  --key-file ${nas_cert_path}/privkey.pem \
